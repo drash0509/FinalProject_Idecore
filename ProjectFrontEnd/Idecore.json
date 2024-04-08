@@ -1,0 +1,276 @@
+{
+    "categories": [
+      {
+        "name": "Home Decor",
+        "products": [
+          {
+            "id": "1",
+            "title": "Elegant Table Lamp",
+            "description": "A stylish table lamp perfect for enhancing your home decor.",
+            "image-url": "",
+            "price": 45.99,
+            "reviews": []
+          },
+          {
+            "id": "2",
+            "title": "Luxury Velvet Pillow",
+            "description": "Add a touch of luxury to your living room with our velvet pillow.",
+            "image-url": "https://example.com/images/luxury-velvet-pillow.jpg",
+            "price": 29.99,
+            "reviews": []
+          },
+          {
+            "id": "3",
+            "title": "Decorative Wall Mirror",
+            "description": "Enhance any room with this elegant decorative wall mirror.",
+            "image-url": "https://example.com/images/decorative-wall-mirror.jpg",
+            "price": 75.00,
+            "reviews": []
+          },
+          {
+            "id": "4",
+            "title": "Abstract Canvas Art",
+            "description": "Bring your walls to life with this captivating abstract canvas art.",
+            "image-url": "https://example.com/images/abstract-canvas-art.jpg",
+            "price": 90.00,
+            "reviews": []
+          },
+          {
+            "id": "5",
+            "title": "Ceramic Vase Set",
+            "description": "A set of beautifully crafted ceramic vases for any space.",
+            "image-url": "https://example.com/images/ceramic-vase-set.jpg",
+            "price": 60.00,
+            "reviews": []
+          }
+        ]
+      },
+      {
+        "name": "Bedroom",
+        "products": [
+          {
+            "id": "6",
+            "title": "Modern Nightstand",
+            "description": "A sleek and modern nightstand to complement your bedroom setup.",
+            "image-url": "https://example.com/images/modern-nightstand.jpg",
+            "price": 120.50,
+            "reviews": []
+          },
+          {
+            "id": "7",
+            "title": "Queen Size Bed Frame",
+            "description": "A sturdy and stylish queen size bed frame for your bedroom.",
+            "image-url": "https://example.com/images/queen-size-bed-frame.jpg",
+            "price": 350.00,
+            "reviews": []
+          },
+          {
+            "id": "8",
+            "title": "Memory Foam Mattress",
+            "description": "Experience unparalleled comfort with our memory foam mattress.",
+            "image-url": "https://example.com/images/memory-foam-mattress.jpg",
+            "price": 400.00,
+            "reviews": []
+          },
+          {
+            "id": "9",
+            "title": "Wardrobe Closet",
+            "description": "A spacious wardrobe closet to keep your clothes organized.",
+            "image-url": "https://example.com/images/wardrobe-closet.jpg",
+            "price": 250.00,
+            "reviews": []
+          },
+          {
+            "id": "10",
+            "title": "Bedside Table Lamp",
+            "description": "Create a warm ambiance in your bedroom with this bedside table lamp.",
+            "image-url": "https://example.com/images/bedside-table-lamp.jpg",
+            "price": 35.99,
+            "reviews": []
+          }
+        ]
+      },
+      {
+        "name": "Kitchen",
+        "products": [
+          {
+            "id": "11",
+            "title": "Kitchen Island Cart",
+            "description": "A versatile kitchen island cart for extra storage and workspace.",
+            "image-url": "https://example.com/images/kitchen-island-cart.jpg",
+            "price": 199.99,
+            "reviews": []
+          },
+          {
+            "id": "12",
+            "title": "12-Piece Cookware Set",
+            "description": "Everything you need for cooking and baking in one comprehensive set.",
+            "image-url": "https://example.com/images/12-piece-cookware-set.jpg",
+            "price": 99.99,
+            "reviews": []
+          },
+          {
+            "id": "13",
+            "title": "Stainless Steel Knife Set",
+            "description": "A premium stainless steel knife set for all your cutting needs.",
+            "image-url": "https://example.com/images/stainless-steel-knife-set.jpg",
+            "price": 70.00,
+            "reviews": []
+          },
+          {
+            "id": "14",
+            "title": "Ceramic Dinnerware Set",
+            "description": "Elevate your dining experience with this elegant ceramic dinnerware set.",
+            "image-url": "https://example.com/images/ceramic-dinnerware-set.jpg",
+            "price": 150.00,
+            "reviews": []
+          },
+          {
+            "id": "15",
+            "title": "Electric Espresso Machine",
+            "description": "Start your day right with a perfect cup of espresso from our electric espresso machine.",
+            "image-url": "https://example.com/images/electric-espresso-machine.jpg",
+            "price": 220.00,
+            "reviews": []
+          }
+        ]
+      },
+      {
+            "name": "Storage",
+            "products": [
+              {
+                "id": "16",
+                "title": "Multipurpose Shelving Unit",
+                "description": "A versatile shelving unit ideal for any room to keep your items organized and accessible.",
+                "image-url": "https://example.com/images/multipurpose-shelving-unit.jpg",
+                "price": 80.00,
+                "reviews": []
+              },
+              {
+                "id": "17",
+                "title": "UnderBed Storage Box",
+                "description": "Maximize your space with our underbed storage solution, perfect for seasonal clothing or linens.",
+                "image-url": "https://example.com/images/underbed-storage-box.jpg",
+                "price": 25.00,
+                "reviews": []
+              },
+              {
+                "id": "18",
+                "title": "Wall Mounted Coat Rack",
+                "description": "Keep your entryway tidy with this stylish and functional wall-mounted coat rack.",
+                "image-url": "https://example.com/images/wall-mounted-coat-rack.jpg",
+                "price": 35.00,
+                "reviews": []
+              },
+              {
+                "id": "19",
+                "title": "Fabric Drawer Organizers",
+                "description": "Organize your wardrobe or dresser drawers with these collapsible fabric organizers.",
+                "image-url": "https://example.com/images/fabric-drawer-organizers.jpg",
+                "price": 15.99,
+                "reviews": []
+              },
+              {
+                "id": "20",
+                "title": "Kitchen Pantry Cabinet",
+                "description": "A spacious kitchen pantry cabinet to store all your foodstuffs and kitchen supplies.",
+                "image-url": "https://example.com/images/kitchen-pantry-cabinet.jpg",
+                "price": 220.00,
+                "reviews": []
+              }
+            ]
+          },
+          {
+            "name": "Kids Furniture",
+            "products": [
+              {
+                "id": "21",
+                "title": "Convertible Crib and Changer",
+                "description": "A multi-functional crib that converts to a toddler bed, daybed, and full-size bed with a changing table attached.",
+                "image-url": "https://example.com/images/convertible-crib-changer.jpg",
+                "price": 299.99,
+                "reviews": []
+              },
+              {
+                "id": "22",
+                "title": "Kids Activity Table",
+                "description": "A colorful and durable table designed for children's playtime, crafts, and learning activities.",
+                "image-url": "https://example.com/images/kids-activity-table.jpg",
+                "price": 60.00,
+                "reviews": []
+              },
+              {
+                "id": "23",
+                "title": "Toy Storage Organizer",
+                "description": "Keep your child's toys neatly organized and accessible with this sturdy toy organizer.",
+                "image-url": "https://example.com/images/toy-storage-organizer.jpg",
+                "price": 45.00,
+                "reviews": []
+              },
+              {
+                "id": "24",
+                "title": "Children's Bookshelf",
+                "description": "A child-friendly bookshelf designed to display and store your child's favorite books.",
+                "image-url": "https://example.com/images/childrens-bookshelf.jpg",
+                "price": 35.00,
+                "reviews": []
+              },
+              {
+                "id": "25",
+                "title": "Youth Gaming Chair",
+                "description": "A comfortable and stylish gaming chair for the young gamer in your life.",
+                "image-url": "https://example.com/images/youth-gaming-chair.jpg",
+                "price": 100.00,
+                "reviews": []
+              }
+            ]
+          },
+          {
+            "name": "Organizers",
+            "products": [
+              {
+                "id": "26",
+                "title": "Desk Organizer Set",
+                "description": "Keep your desk clutter-free with this elegant desk organizer set.",
+                "image-url": "https://example.com/images/desk-organizer-set.jpg",
+                "price": 30.00,
+                "reviews": []
+              },
+              {
+                "id": "27",
+                "title": "Closet Organization System",
+                "description": "Customize your closet with this comprehensive closet organization system.",
+                "image-url": "https://example.com/images/closet-organization-system.jpg",
+                "price": 150.00,
+                "reviews": []
+              },
+              {
+                "id": "28",
+                "title": "Jewelry Storage Mirror",
+                "description": "A full-length mirror that opens to reveal a spacious jewelry storage solution.",
+                "image-url": "https://example.com/images/jewelry-storage-mirror.jpg",
+                "price": 120.00,
+                "reviews": []
+              },
+              {
+                "id": "29",
+                "title": "Garage Storage Rack",
+                "description": "Maximize your garage space with this heavy-duty storage rack.",
+                "image-url": "https://example.com/images/garage-storage-rack.jpg",
+                "price": 200.00,
+                "reviews": []
+              },
+              {
+                "id": "30",
+                "title": "Bathroom Space Saver",
+                "description": "An over-the-toilet storage unit that adds extra shelving and organization to your bathroom.",
+                "image-url": "https://example.com/images/bathroom-space-saver.jpg",
+                "price": 50.00,
+                "reviews": []
+              }
+            ]
+          }
+        ]
+      
+  }
+  
