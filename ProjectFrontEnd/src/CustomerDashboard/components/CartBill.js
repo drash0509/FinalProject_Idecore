@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import DiscountDropdown from "./DiscountDropdown";
+import fakeDiscounts from "./fakeDiscount";
 
 const Bill = ({ items, onClose, onConfirm }) => {
   const [showBill, setShowBill] = useState(false);
+  const [selectedDiscount, setSelectedDiscount] = useState(null); // State for selected discount
 
   const calculateTotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -12,7 +15,16 @@ const Bill = ({ items, onClose, onConfirm }) => {
   };
 
   const calculateGrandTotal = () => {
-    return calculateTotal() + calculateGST();
+    let total = calculateTotal();
+    if (selectedDiscount) {
+      total *= 1 - selectedDiscount.discount;
+    }
+    return total + calculateGST();
+  };
+
+  const handleDiscountSelect = (discount) => {
+    setSelectedDiscount(discount);
+    setShowBill(false); 
   };
 
   return (
@@ -54,13 +66,30 @@ const Bill = ({ items, onClose, onConfirm }) => {
               <span>GST (12%):</span>
               <span>${calculateGST().toFixed(2)}</span>
             </div>
+            {selectedDiscount && (
+              <div className="flex justify-between">
+                <span>Discount:</span>
+                <span>{selectedDiscount.discount}</span>
+              </div>
+            )}
+           
             <div className="flex justify-between font-semibold">
               <span>Grand Total:</span>
               <span>${calculateGrandTotal().toFixed(2)}</span>
             </div>
+           
           </div>
         </div>
-        <div className="mt-8 flex justify-end">
+        <div className="my-4 flex justify-end">
+              <button
+                className="px-2 py-1  border-0  border-green-00 text-green-700 rounded-md mr-0"
+                onClick={() => setShowBill(true)}
+              >
+                Avail Discount
+              </button>
+            </div>
+        <div className=" flex justify-end">
+        
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-md mr-2"
             onClick={onClose}
@@ -75,6 +104,12 @@ const Bill = ({ items, onClose, onConfirm }) => {
           </button>
         </div>
       </div>
+      {showBill && (
+        <DiscountDropdown
+          discounts={fakeDiscounts}
+          onSelect={handleDiscountSelect}
+        />
+      )}
     </div>
   );
 };
