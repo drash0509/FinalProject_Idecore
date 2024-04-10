@@ -12,7 +12,7 @@ const ProductList = ({ products }) => {
             imageUrl={product.image_url[0]}
             title={product.title}
             description={product.description}
-            price={`$${product.price.toFixed(2)}`}
+            price={`₹${product.price.toFixed(2)}`}
             rating={product.rating}
           />
         ))}

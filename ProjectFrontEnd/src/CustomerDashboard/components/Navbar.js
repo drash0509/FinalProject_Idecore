@@ -174,7 +174,7 @@ export default function Navbar() {
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
                       onClick={() => logout()}
                     >
-                      Log Out
+                      Your Profile
                     </button>
                   ) : (
                     <button

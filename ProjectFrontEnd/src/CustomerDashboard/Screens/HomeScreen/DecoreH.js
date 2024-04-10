@@ -25,7 +25,7 @@ const DecoreH = () => {
             id={product.id}
             imageUrl={product['image-url']}
             title={product.title}
-            price={`$${product.price.toFixed(2)}`}
+            price={`₹${product.price.toFixed(2)}`}
             rating={product.rating}
           />
         ))}

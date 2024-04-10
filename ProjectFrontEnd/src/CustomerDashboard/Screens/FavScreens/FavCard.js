@@ -32,7 +32,7 @@ const FavCard = ({ id, imageUrl, title, price, description, onRemove }) => {
         <span style={styles.description}>{description}</span>
         <div style={styles.footer}>
           <img src={favIcon} alt="Favorite" style={styles.favIcon} />
-          <span style={styles.price}>${price}</span>
+          <span style={styles.price}>₹{price}</span>
         </div>
       </div>
     </div>

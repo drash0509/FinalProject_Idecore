@@ -41,7 +41,7 @@ const SearchResults = () => {
           imageUrl={product['image-url']}
           title={product.title}
           description={product.description}
-          price={`$${product.price.toFixed(2)}`}
+          price={`₹${product.price.toFixed(2)}`}
           rating={product.rating}
         />
       ))}

@@ -145,7 +145,7 @@ const CartScreen = () => {
                 items={data.items.map((item) => ({
                   productId: item.productId,
                   quantity: item.quantity,
-                  price: item.subTotal,
+                  price: item.price,
                   product: item.product,
                 }))}
                 onClose={handleBillClose}
@@ -220,7 +220,7 @@ const CartScreen = () => {
           <h3 className="text-lg font-semibold text-brown-800 mb-2">
             Total Cart Value:
           </h3>
-          <h3 className="text-base text-brown-800">${total}</h3>
+          <h3 className="text-base text-brown-800">₹{total}</h3>
         </div>
         <div className="flex flex-col space-y-5">
           <button

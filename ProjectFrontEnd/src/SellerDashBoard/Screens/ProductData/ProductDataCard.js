@@ -15,7 +15,7 @@ function ProductDataCard({ image, title, price, stock, onEdit, onDelete }) {
         {/* Adjusted text size */}
       </div>
       <div className="flex flex-col items-end mr-14 md:mr-5 sm:mr-2">
-        <p className="m-0 mb-1 text-l md:text-2xl font-bold">${price}</p>
+        <p className="m-0 mb-1 text-l md:text-2xl font-bold">₹{price}</p>
         <p className="m-0 text-s">{stock} in stock</p>
       </div>
       <button

@@ -33,7 +33,7 @@ const CartCard = ({
       </div>
 
       <p className="flex-20 text-custom-brown text-xl mt-6 font-bold">
-        ${item.price}
+      ₹{item.price}
       </p>
 
       <div className="flex-20 my-3 md:my-1 ">
@@ -44,7 +44,7 @@ const CartCard = ({
       </div>
 
       <p className="flex-20 text-custom-brown text-xl font-bold">
-        ${(item.quantity * item.price).toFixed(2)}
+      ₹{(item.quantity * item.price).toFixed(2)}
       </p>
       <button onClick={() => onDelete(item._id)}>
         <img src={crossIcon} className="w-5 h-5   " alt="Remove" />
