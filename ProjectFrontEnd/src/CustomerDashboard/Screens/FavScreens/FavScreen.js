@@ -97,7 +97,7 @@ const FavScreen = () => {
               imageUrl={product.image_url}
               title={product.title}
               description={product.description}
-              price={`${product.price}`}
+              price={`₹{product.price}`}
               onRemove={() => handleRemove(product._id)} // Pass handleRemove as a prop
             />
           ))}
@@ -109,7 +109,7 @@ const FavScreen = () => {
               imageUrl={product.image_url}
               title={product.title}
               description={product.description}
-              price={`${product.price}`}
+              price={`₹{product.price}`}
               onRemove={() => handleRemove(product._id)} // Pass handleRemove as a prop
             />
           ))}

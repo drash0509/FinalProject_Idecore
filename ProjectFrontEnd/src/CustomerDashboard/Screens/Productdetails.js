@@ -201,7 +201,7 @@ const ProductDetails = () => {
                   <Rating rating={product.rating} />
                 </div>
                 <p className="font-medium text-lg text-[#49372B]">
-                  Price: ${product.price}
+                  Price: ₹{product.price}
                 </p>
               </div>
               <div>
