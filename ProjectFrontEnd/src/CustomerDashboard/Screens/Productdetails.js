@@ -20,7 +20,9 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const [selectedImageUrl, setSelectedImageUrl] =
+    useState();
+    // `http://localhost:4001/images/${product.image_url[0]}`
   const [isAddToCartHovered, setIsAddToCartHovered] = useState(false);
   const [isBuyNowHovered, setIsBuyNowHovered] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -96,6 +98,30 @@ const ProductDetails = () => {
     }
   };
 
+  const cart = async (product, quantity) => {
+    console.log("product : ", product);
+    console.log("quantity : ", quantity);
+
+    if (userCookie) {
+      try {
+        const res = await axios.post(
+          "http://localhost:4001/cart/",
+          { product, quantity },
+          {
+            headers: {
+              Authorization: `Bearer ${userCookie}`, //
+            },
+          }
+        );
+        console.log("res.data.data : ", res.data.data);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      addToCart(product, quantity);
+    }
+  };
+
   const handleBuyNowClick = () => {
     if (userCookie) {
       setShowBill(true);
@@ -138,13 +164,14 @@ const ProductDetails = () => {
                   product: product.title,
                 },
               ]}
+              mappedItems={paymentData}
               onClose={handleBillClose}
-              onConfirm={() => {
-                setShowBill(false);
-                navigate("/payment", {
-                  state: { mappedItems: paymentData },
-                });
-              }}
+              // onConfirm={() => {
+              //   setShowBill(false);
+              //   navigate("/payment", {
+              //     state: { mappedItems: paymentData },
+              //   });
+              // }}
             />
           )}
           <img
@@ -225,7 +252,7 @@ const ProductDetails = () => {
                     } p-2 px-12 rounded-md`}
                     onMouseEnter={() => setIsAddToCartHovered(true)}
                     onMouseLeave={() => setIsAddToCartHovered(false)}
-                    onClick={() => addToCart(product, quantity)}
+                    onClick={() => cart(product, quantity)}
                   >
                     Add to Cart
                   </button>

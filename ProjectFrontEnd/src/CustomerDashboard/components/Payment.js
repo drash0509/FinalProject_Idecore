@@ -43,17 +43,9 @@ import { Buffer } from "buffer";
 function PaymentForm() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { mappedItems } = location.state;
+  const { mappedItems, total } = location.state;
 
-  const calculateTotal = mappedItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
-  const calculateGST = calculateTotal * 0.12;
-
-  const calculateGrandTotal = calculateTotal + calculateGST;
-
+  console.log("total : ", total);
   console.log("mappedItems : ", mappedItems);
   // console.log("quantity : ", quantity);
 
@@ -72,7 +64,7 @@ function PaymentForm() {
   const onPay = async () => {
     const res1 = await axios.post(
       "http://localhost:4001/checkout",
-      { calculateTotal },
+      { total },
       {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -101,9 +93,7 @@ function PaymentForm() {
           number: number,
           mappedItems: mappedItems,
           user: userToken,
-          calculateTotal: calculateTotal,
-          calculateGST: calculateGST,
-          calculateGrandTotal: calculateGrandTotal,
+          calculateGrandTotal: total,
         };
 
         const res = await axios.post(

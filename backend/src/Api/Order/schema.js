@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const cron = require("node-cron");
 const UserModel = require("../User/schema");
+// const orderModel = require("./")
 
 // Define the order schema
 const orderSchema = new mongoose.Schema({
@@ -9,6 +10,18 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Assuming you have a User schema for user information
     // required: true,
+  },
+  userName: {
+    type: String,
+  },
+
+  email: {
+    type: String,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error("Email is wrong");
+      }
+    },
   },
   address: {
     type: String,
@@ -46,7 +59,8 @@ const orderSchema = new mongoose.Schema({
   wallet: { type: String },
   vpa: { type: String },
   payment_id: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
+  timestamp: { type: Date, default: new Date(2024, 3, 8, 12, 30, 0) },
+  statusOfDilivery: { type: String, default: "pending" },
   payment_method: { type: String, required: true },
   departure_time: {
     type: Date,
@@ -57,7 +71,7 @@ const orderSchema = new mongoose.Schema({
 
       // Add one minute to the current date
       const departureDate = new Date(currentDate);
-      departureDate.setMinutes(currentDate.getMinutes() + 1);
+      departureDate.setDate(currentDate.getDate() + 3);
 
       // Return the departure date
       return departureDate;
@@ -69,13 +83,14 @@ const orderSchema = new mongoose.Schema({
 const updateOrderStatuses = async () => {
   try {
     const currentTime = new Date();
-    const ordersToUpdate = await orderModel.find({
-      status: "pending", // Only update orders with status "pending"
+    const Order = mongoose.model("Order");
+    const ordersToUpdate = await Order.find({
+      statusOfDilivery: "pending", // Only update orders with status "pending"
       departure_time: { $lte: currentTime }, // Departure time should be less than or equal to current time
     });
 
     for (const order of ordersToUpdate) {
-      order.status = "completed";
+      order.statusOfDilivery = "completed";
       await order.save();
     }
   } catch (error) {

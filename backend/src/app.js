@@ -25,6 +25,8 @@ const CookiDataRouter = require("./Api/cookieData/cookie");
 const reviewRouter = require("./Api/reviews/api");
 const discountSchema = require("./Api/Discount/schema");
 const discountModel = require("./Api/Discount/discount");
+const contactUsModel = require("./Api/contactUs/schema");
+const contactUsRouter = require("./Api/contactUs/contact");
 const port = 4001 || process.env.PORT;
 
 app.use(cors());
@@ -47,6 +49,7 @@ app.use(searchRouter);
 app.use(CookiDataRouter);
 app.use(reviewRouter);
 app.use(discountModel);
+app.use(contactUsRouter);
 
 app.get("/", (req, res) => {
   res.cookie("jnt", "value");

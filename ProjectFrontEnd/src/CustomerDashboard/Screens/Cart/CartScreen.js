@@ -148,15 +148,16 @@ const CartScreen = () => {
                   price: item.price,
                   product: item.product,
                 }))}
+                mappedItems={product}
                 onClose={handleBillClose}
-                onConfirm={() => {
-                  setShowBill(false);
-                  navigate("/payment", {
-                    state: {
-                      mappedItems: product,
-                    },
-                  });
-                }}
+                // onConfirm={() => {
+                //   setShowBill(false);
+                //   navigate("/payment", {
+                //     state: {
+                //       mappedItems: product,
+                //     },
+                //   });
+                // }}
               />
             )}
             <div className="flex items-center  gap-4 mt-8 ">

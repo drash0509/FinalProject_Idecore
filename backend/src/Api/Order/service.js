@@ -6,6 +6,7 @@ const orderModel = require("./schema");
 const productModel = require("../product/schema");
 const jwt = require("jsonwebtoken");
 const sellingProductModel = require("../SellingProduct/schema");
+const userModel = require("../User/schema");
 
 async function verify(
   razorpay_payment_id,
@@ -121,9 +122,13 @@ async function updateData(data, paymentDetails, razorpay_payment_id) {
     "atuhjiokbvdftghyujgdefghyjbcfhhgds"
   );
   console.log("verifyUser : ", verifyUser);
-  // console.log("seller : ", sellerId("6606ab999c21afd0289876e8"));
+
+  const userData = await userModel.findById(verifyUser._id);
+
   const updatedData = await orderModel({
     user: verifyUser._id,
+    userName: userData.name,
+    email: userData.email,
     address: data.address,
     contact_no: data.number,
     products: await Promise.all(
@@ -134,7 +139,7 @@ async function updateData(data, paymentDetails, razorpay_payment_id) {
       }))
     ),
     order_id: paymentDetails.id,
-    amount: paymentDetails.amount,
+    amount: paymentDetails.amount / 100,
     currency: paymentDetails.currency,
     status: paymentDetails.status,
     card_id: paymentDetails.card_id ? paymentDetails.card_id : null,
@@ -156,4 +161,57 @@ async function updateData(data, paymentDetails, razorpay_payment_id) {
   }
 }
 
-module.exports = { verify, paymentDetails, updateData };
+async function getSellerData(id, data) {
+  const orderData = await orderModel.find();
+
+  let completed = [];
+  let pending = [];
+  orderData.map((item) => {
+    if (item.statusOfDilivery === "pending") {
+      // Filter products array to include only items matching the sellerId
+      const pendingProducts = item.products.filter(
+        (item2) => item2.sellerId.toString() === id.toString()
+      );
+
+      if (pendingProducts.length > 0) {
+        // Clone the item and replace its products array with filtered pendingProducts
+        const newItem = {
+          item: item,
+          products: pendingProducts,
+        };
+        pending.push(newItem);
+        console.log("pending : ", pending);
+      }
+    }
+
+    if (item.statusOfDilivery === "completed") {
+      // Filter products array to include only items matching the sellerId
+      const completedProducts = item.products.filter(
+        (item2) => item2.sellerId.toString() === id.toString()
+      );
+
+      if (completedProducts.length > 0) {
+        // Clone the item and replace its products array with filtered completedProducts
+        const newItem = {
+          item: item,
+          products: completedProducts,
+        };
+        completed.push(newItem);
+        console.log("completed : ", completed);
+      }
+    }
+  });
+
+  data = {
+    completed: completed,
+    pending: pending,
+  };
+
+  if (data.pending.length > 0 || data.completed.length > 0) {
+    return data;
+  } else {
+    return null;
+  }
+}
+
+module.exports = { verify, paymentDetails, updateData, getSellerData };

@@ -1,96 +1,233 @@
-import React, { useState } from 'react';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import salesStatistics from '../../salesStatistics';
+import React, { useEffect, useState } from "react";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Graph = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('week');
+  const [selectedPeriod, setSelectedPeriod] = useState("week");
+  const [data, setData] = useState({ completed: [], pending: [] });
 
-  const filteredSales = salesStatistics.filter(stat => {
-    const currentDate = new Date();
-    
-    if (selectedPeriod === 'week') {
-      const sevenDaysAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6);
-      const statDate = new Date(stat.date);
-      return statDate >= sevenDaysAgo && statDate <= currentDate;
-    } else if (selectedPeriod === 'month') {
-      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      const statDate = new Date(stat.date);
-      return statDate >= firstDayOfMonth && statDate <= lastDayOfMonth;
-    
-    } else if (selectedPeriod === 'year') {
-      return new Date(stat.date).getFullYear() === currentDate.getFullYear();
-    }
-  });
+  const sellerUserToken = Cookies.get("seller_user");
+
+  useEffect(() => {
+    const fetchSellerOrder = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/get_seller_order", {
+          headers: {
+            Authorization: `Bearer ${sellerUserToken}`,
+          },
+        });
+        setData(res.data.data);
+      } catch (error) {
+        console.error("Error fetching seller order:", error);
+      }
+    };
+
+    fetchSellerOrder();
+  }, [sellerUserToken]);
+
+  console.log("selectedPeriod : ", selectedPeriod);
+  let filteredSales = [];
+
+  console.log("data : ", data);
+
+  if (data && data.completed && data.pending) {
+    filteredSales =
+      selectedPeriod === "week"
+        ? data.completed
+            .filter((stat) => {
+              console.log("stat : ", stat);
+              const currentDate = new Date();
+              console.log("currentDate : ", currentDate);
+              const sevenDaysAgo = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate() - 6
+              );
+              const statDate = new Date(stat.item.timestamp);
+              console.log("statDate : ", statDate);
+              const data1 = statDate >= sevenDaysAgo && statDate <= currentDate;
+              console.log("data1 : ", data1);
+              return statDate >= sevenDaysAgo && statDate <= currentDate;
+            })
+            .concat(
+              data.pending.filter((stat) => {
+                const currentDate = new Date();
+                const sevenDaysAgo = new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth(),
+                  currentDate.getDate() - 6
+                );
+                const statDate = new Date(stat.item.timestamp);
+                return statDate >= sevenDaysAgo && statDate <= currentDate;
+              })
+            )
+        : selectedPeriod === "month"
+        ? data.completed
+            .filter((stat) => {
+              const currentDate = new Date();
+              const firstDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                1
+              );
+              const lastDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth() + 1,
+                0
+              );
+              const statDate = new Date(stat.item.timestamp);
+              return statDate >= firstDayOfMonth && statDate <= lastDayOfMonth;
+            })
+            .concat(
+              data.pending.filter((stat) => {
+                const currentDate = new Date();
+                const firstDayOfMonth = new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth(),
+                  1
+                );
+                const lastDayOfMonth = new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth() + 1,
+                  0
+                );
+                const statDate = new Date(stat.item.timestamp);
+                return (
+                  statDate >= firstDayOfMonth && statDate <= lastDayOfMonth
+                );
+              })
+            )
+        : selectedPeriod === "year"
+        ? data.completed
+            .filter((stat) => {
+              const currentDate = new Date();
+              return (
+                new Date(stat.item.timestamp).getFullYear() ===
+                currentDate.getFullYear()
+              );
+            })
+            .concat(
+              data.pending.filter((stat) => {
+                const currentDate = new Date();
+                return (
+                  new Date(stat.item.timestamp).getFullYear() ===
+                  currentDate.getFullYear()
+                );
+              })
+            )
+        : [];
+  }
+
+  console.log("filteredSales : ", filteredSales);
 
   const productStatusData = {
-    completed: filteredSales.reduce((acc, curr) => acc + curr.ordersCompleted, 0),
-    incomplete: filteredSales.reduce((acc, curr) => acc + curr.ordersUncompleted, 0),
-    pending: filteredSales.reduce((acc, curr) => acc + curr.ordersPending, 0)
+    completed: filteredSales
+      .filter((data) => data.statusOfDelivery === "completed") // Filter completed sales
+      .reduce((acc, curr) => {
+        // Iterate over completed sales
+        const productsQuantity = curr.products.reduce(
+          (total, product) => total + product.quantity,
+          0
+        );
+        return acc + productsQuantity; // Sum up the quantities
+      }, 0),
+    incomplete: filteredSales
+      .filter((data) => data.statusOfDelivery === "incomplete") // Filter incomplete sales
+      .reduce((acc, curr) => {
+        const productsQuantity = curr.products.reduce(
+          (total, product) => total + product.quantity,
+          0
+        );
+        return acc + productsQuantity;
+      }, 0),
+    pending: filteredSales
+      .filter((data) => data.statusOfDelivery === "pending") // Filter pending sales
+      .reduce((acc, curr) => {
+        const productsQuantity = curr.products.reduce(
+          (total, product) => total + product.quantity,
+          0
+        );
+        return acc + productsQuantity; // Sum up the quantities
+      }, 0), // Sum up the ordersPending
   };
 
-  const salesTrendData = filteredSales.map(stat => [new Date(stat.date).getTime(), stat.revenue]);
+  console.log("productStatusData : ", productStatusData);
 
-  const productSalesData = filteredSales.flatMap(stat => stat.productsSold.map(product => ({
-    name: product.productName,
-    revenue: product.revenue
-  })));
+  const salesTrendData = filteredSales.map((stat) => [
+    new Date(stat.item.timestamp).getTime(),
+    stat.revenue,
+  ]);
+
+  const productSalesData = filteredSales.flatMap((stat) =>
+    stat.productsSold.map((product) => ({
+      name: product.productName,
+      revenue: product.revenue,
+    }))
+  );
 
   const options = {
     chart: {
-      type: 'pie',
+      type: "pie",
     },
     title: {
-      text: 'Product Status'
+      text: "Product Status",
     },
-    series: [{
-      name: 'Orders',
-      data: Object.entries(productStatusData).map(([status, count]) => ({ name: status, y: count })),
-    }],
+    series: [
+      {
+        name: "Orders",
+        data: Object.entries(productStatusData).map(([status, count]) => ({
+          name: status,
+          y: count,
+        })),
+      },
+    ],
   };
 
   const trendOptions = {
     chart: {
-      type: 'line',
+      type: "line",
     },
     title: {
-      text: 'Sales Trend'
+      text: "Sales Trend",
     },
     xAxis: {
-      type: 'datetime',
+      type: "datetime",
     },
-    series: [{
-      name: 'Revenue',
-      data: salesTrendData,
-    }],
+    series: [
+      {
+        name: "Revenue",
+        data: salesTrendData,
+      },
+    ],
   };
 
   const barOptions = {
     chart: {
-      type: 'bar',
+      type: "bar",
     },
     title: {
-      text: 'Product Sales'
+      text: "Product Sales",
     },
     xAxis: {
-      categories: productSalesData.map(product => product.name),
+      categories: productSalesData.map((product) => product.name),
     },
-    series: [{
-      name: 'Revenue',
-      data: productSalesData.map(product => product.revenue),
-    }],
+    series: [
+      {
+        name: "Revenue",
+        data: productSalesData.map((product) => product.revenue),
+      },
+    ],
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-    <h1 className='text-black text-3xl my-3 font-bold'>
-        YOUR SALES DATA:
-    </h1>
-      <select 
+      <h1 className="text-black text-3xl my-3 font-bold">YOUR SALES DATA:</h1>
+      <select
         className="block w-full bg-white border border-gray-300 p-2 rounded-md mb-4"
-        value={selectedPeriod} 
-        onChange={e => setSelectedPeriod(e.target.value)}
+        value={selectedPeriod}
+        onChange={(e) => setSelectedPeriod(e.target.value)}
       >
         <option value="week">Week</option>
         <option value="month">Month</option>

@@ -4,12 +4,14 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const instance = require("../../conn");
 const orederService = require("./service");
+const orderModel = require("./schema");
+const sellerProductModel = require("../SellingProduct/schema");
 
 async function checkout(req, res, next) {
   console.log("in checkout ---- : ", req.body);
   try {
     const options = {
-      amount: Number(req.body.calculateTotal * 100), // amount in the smallest currency unit
+      amount: Number(req.body.total * 100), // amount in the smallest currency unit
       currency: "INR",
       receipt: "Receipt no. 1",
       notes: {
@@ -71,4 +73,63 @@ async function payment_verfication(req, res, next) {
   }
 }
 
-module.exports = { checkout, payment_verfication };
+async function get_user_order(req, res, next) {
+  try {
+    // console.log(req.body);
+    const user = req.user;
+    console.log("user : ", user);
+
+    const data = await orderModel.find({ user: user });
+    console.log("data : ", data);
+
+    if (data) {
+      return res.send({
+        data: data,
+        status: 200,
+        message: "orederd data",
+      });
+    } else {
+      return res.send({
+        data: null,
+        status: 200,
+        message: "start shopping",
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+}
+
+async function get_seller_order(req, res, next) {
+  try {
+    const userId = req.user._id;
+    console.log("user : ", userId);
+
+    const data = await orederService.getSellerData(userId, sellingProductdata);
+
+    if (data) {
+      // Check if any data is returned
+      return res.status(200).json({
+        data: data, // Use the fetched data
+        status: 200,
+        message: "Ordered data",
+      });
+    } else {
+      return res.status(200).json({
+        data: null,
+        status: 200,
+        message: "No orders found",
+      });
+    }
+  } catch (e) {
+    console.log("error : ", e);
+    next(e);
+  }
+}
+
+module.exports = {
+  checkout,
+  payment_verfication,
+  get_user_order,
+  get_seller_order,
+};

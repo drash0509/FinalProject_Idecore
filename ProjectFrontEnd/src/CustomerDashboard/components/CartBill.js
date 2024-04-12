@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import DiscountDropdown from "./DiscountDropdown";
-import fakeDiscounts from "./fakeDiscount";
+import fakeDiscounts from "./fakeDiscount"; // Not used in the current code
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Bill = ({ items, onClose, onConfirm }) => {
+const Bill = ({ items, mappedItems, onClose }) => {
   const [showBill, setShowBill] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState(null);
-  const [discount, setDiscount] = useState([]); // State for selected discount
+  const [discount, setDiscount] = useState([]);
   const [discountValue, setDiscountValue] = useState([]);
   const [total, setTotal] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(0);
   const [coupon, setCoupon] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-
-  console.log("items : ", items);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDiscountData = async () => {
       try {
         const res = await axios.get("http://localhost:4001/discount");
         console.log("res.data : ", res.data);
-
         setDiscount(res.data.data);
       } catch (error) {
         console.log(error);
@@ -37,9 +37,7 @@ const Bill = ({ items, onClose, onConfirm }) => {
       );
     };
 
-    const calculateGST = () => {
-      return calculateTotal() * 0.12;
-    };
+    setTotal(calculateTotal());
 
     let discountValue = 0;
     if (selectedDiscount && calculateTotal() >= selectedDiscount.price_limit) {
@@ -51,14 +49,24 @@ const Bill = ({ items, onClose, onConfirm }) => {
       setCoupon(false);
     }
 
-    setTotal(calculateTotal());
+    const calculateGST = () => {
+      return calculateTotal() * 0.12;
+    };
+
+    if (total > 500) {
+      setGrandTotal(calculateTotal() - discountValue + calculateGST());
+    } else {
+      // setGrandTotal(calculateTotal() - discountValue + calculateGST() + 50);
+      setGrandTotal(calculateTotal() - discountValue + calculateGST());
+    }
     setDiscountValue(discountValue);
   }, [items, selectedDiscount]);
+  // export const finaltotal = grandTotal;
+  console.log("grandTotal : ", grandTotal);
   const handleDiscountSelect = async (discount) => {
     setSelectedDiscount(discount);
     setShowDropdown(false);
     setShowBill(false);
-
     setCoupon(true);
   };
 
@@ -68,6 +76,16 @@ const Bill = ({ items, onClose, onConfirm }) => {
 
   const removeCoupon = () => {
     setSelectedDiscount(null);
+  };
+
+  console.log("total123 : ", total);
+  console.log("mappedItems : ", mappedItems);
+
+  const onConfirm = () => {
+    // setShowBill(false);
+    navigate("/payment", {
+      state: { mappedItems: mappedItems, total: grandTotal },
+    });
   };
 
   return (
@@ -123,12 +141,10 @@ const Bill = ({ items, onClose, onConfirm }) => {
               </div>
             )}
 
-            {
-              <div className="flex justify-between">
-                <span>GST (12%):</span>
-                <span>₹{(total * 0.12).toFixed(2)}</span>
-              </div>
-            }
+            <div className="flex justify-between">
+              <span>GST (12%):</span>
+              <span>₹{(total * 0.12).toFixed(2)}</span>
+            </div>
 
             {total >= 500 ? (
               <div className="flex justify-between">
@@ -142,26 +158,15 @@ const Bill = ({ items, onClose, onConfirm }) => {
               </div>
             )}
 
-            {total >= 500 ? (
-              <div className="flex justify-between font-semibold">
-                <span>Grand Total:</span>
-                <span>
-                  ₹{(total + total * 0.12 - discountValue).toFixed(2)}
-                </span>
-              </div>
-            ) : (
-              <div className="flex justify-between font-semibold">
-                <span>Grand Total:</span>
-                <span>
-                  ₹{(total + total * 0.12 + 50 - discountValue).toFixed(2)}
-                </span>
-              </div>
-            )}
+            <div className="flex justify-between font-semibold">
+              <span>Grand Total:</span>
+              <span>₹{grandTotal.toFixed(2)}</span>
+            </div>
           </div>
         </div>
         <div className="my-4 flex justify-end">
           <button
-            className="px-2 py-1  border-0  border-green-00 text-green-700 rounded-md mr-0"
+            className="px-2 py-1 border-0 border-green-00 text-green-700 rounded-md mr-0"
             onClick={() => {
               setShowBill(true);
               setShowDropdown(true);
@@ -170,7 +175,7 @@ const Bill = ({ items, onClose, onConfirm }) => {
             Avail Discount
           </button>
         </div>
-        <div className=" flex justify-end">
+        <div className="flex justify-end">
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-md mr-2"
             onClick={onClose}
