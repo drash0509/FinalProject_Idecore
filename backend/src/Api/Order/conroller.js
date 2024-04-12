@@ -105,7 +105,8 @@ async function get_seller_order(req, res, next) {
     const userId = req.user._id;
     console.log("user : ", userId);
 
-    const data = await orederService.getSellerData(userId, sellingProductdata);
+    const data = await orederService.getSellerData(userId);
+    console.log("data : ", data);
 
     if (data) {
       // Check if any data is returned

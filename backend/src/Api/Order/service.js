@@ -161,7 +161,7 @@ async function updateData(data, paymentDetails, razorpay_payment_id) {
   }
 }
 
-async function getSellerData(id, data) {
+async function getSellerData(id) {
   const orderData = await orderModel.find();
 
   let completed = [];
@@ -180,7 +180,7 @@ async function getSellerData(id, data) {
           products: pendingProducts,
         };
         pending.push(newItem);
-        console.log("pending : ", pending);
+        // console.log("pending : ", pending);
       }
     }
 
@@ -197,7 +197,7 @@ async function getSellerData(id, data) {
           products: completedProducts,
         };
         completed.push(newItem);
-        console.log("completed : ", completed);
+        // console.log("completed : ", completed);
       }
     }
   });
@@ -206,6 +206,8 @@ async function getSellerData(id, data) {
     completed: completed,
     pending: pending,
   };
+
+  console.log("data : ", data);
 
   if (data.pending.length > 0 || data.completed.length > 0) {
     return data;
