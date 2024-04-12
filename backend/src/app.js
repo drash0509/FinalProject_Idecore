@@ -5,6 +5,7 @@ const productRouter = require("./Api/product/api");
 const cartRouter = require("./Api/Cart/api");
 const orderRouter = require("./Api/Order/api");
 require("./conn");
+require("dotenv").config();
 const path = require("path");
 const { fileURLToPath } = require("url");
 const cookieParser = require("cookie-parser");

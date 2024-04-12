@@ -10,7 +10,7 @@ const Graph = () => {
 
   const sellerUserToken = Cookies.get("seller_user");
 
-  useEffect(() => {
+  useEffect(async () => {
     const fetchSellerOrder = async () => {
       try {
         const res = await axios.get("http://localhost:4001/get_seller_order", {
@@ -18,6 +18,7 @@ const Graph = () => {
             Authorization: `Bearer ${sellerUserToken}`,
           },
         });
+        console.log("res.data.data", res.data.data);
         setData(res.data.data);
       } catch (error) {
         console.error("Error fetching seller order:", error);
@@ -30,7 +31,7 @@ const Graph = () => {
   console.log("selectedPeriod : ", selectedPeriod);
   let filteredSales = [];
 
-  console.log("data : ", data);
+  // console.log("data : ", data);
 
   if (data && data.completed && data.pending) {
     filteredSales =
@@ -122,35 +123,47 @@ const Graph = () => {
 
   console.log("filteredSales : ", filteredSales);
 
+  // const productStatusData = {
+  //   completed: filteredSales
+  //     .filter((data) => data.item.statusOfDelivery === "completed") // Filter completed sales
+  //     .reduce((acc, curr) => {
+  //       // Iterate over completed sales
+  //       const productsQuantity = curr.products.reduce(
+  //         (total, product) => total + product.quantity,
+  //         0
+  //       );
+  //       return acc + productsQuantity; // Sum up the quantities
+  //     }, 0),
+  //   incomplete: filteredSales
+  //     .filter((data) => data.item.statusOfDelivery === "incomplete") // Filter incomplete sales
+  //     .reduce((acc, curr) => {
+  //       const productsQuantity = curr.products.reduce(
+  //         (total, product) => total + product.quantity,
+  //         0
+  //       );
+  //       return acc + productsQuantity;
+  //     }, 0),
+  //   pending: filteredSales
+  //     .filter((data) => data.item.statusOfDelivery === "pending") // Filter pending sales
+  //     .reduce((acc, curr) => {
+  //       const productsQuantity = curr.products.reduce(
+  //         (total, product) => total + product.quantity,
+  //         0
+  //       );
+  //       return acc + productsQuantity; // Sum up the quantities
+  //     }, 0), // Sum up the ordersPending
+  // };
+
   const productStatusData = {
-    completed: filteredSales
-      .filter((data) => data.statusOfDelivery === "completed") // Filter completed sales
-      .reduce((acc, curr) => {
-        // Iterate over completed sales
-        const productsQuantity = curr.products.reduce(
-          (total, product) => total + product.quantity,
-          0
-        );
-        return acc + productsQuantity; // Sum up the quantities
-      }, 0),
-    incomplete: filteredSales
-      .filter((data) => data.statusOfDelivery === "incomplete") // Filter incomplete sales
-      .reduce((acc, curr) => {
-        const productsQuantity = curr.products.reduce(
-          (total, product) => total + product.quantity,
-          0
-        );
-        return acc + productsQuantity;
-      }, 0),
-    pending: filteredSales
-      .filter((data) => data.statusOfDelivery === "pending") // Filter pending sales
-      .reduce((acc, curr) => {
-        const productsQuantity = curr.products.reduce(
-          (total, product) => total + product.quantity,
-          0
-        );
-        return acc + productsQuantity; // Sum up the quantities
-      }, 0), // Sum up the ordersPending
+    completed: filteredSales.filter(
+      (product) => product.item.statusOfDelivery === "completed"
+    ),
+    // incomplete: filteredSales.filter(
+    //   (product) => product.item.statusOfDelivery === "incomplete"
+    // ),
+    pending: filteredSales.filter(
+      (product) => product.item.statusOfDelivery === "pending"
+    ),
   };
 
   console.log("productStatusData : ", productStatusData);
